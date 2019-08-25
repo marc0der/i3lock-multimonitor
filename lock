@@ -2,10 +2,10 @@
 
 # Constants
 DISPLAY_RE="([0-9]+)x([0-9]+)\\+([0-9]+)\\+([0-9]+)" # Regex to find display dimensions
-FOLDER=`dirname "$BASH_SOURCE"` # Current folder
+FOLDER=$(dirname "$BASH_SOURCE") # Current folder
 CACHE_FOLDER="$FOLDER"/img/cache/ # Cache folder
-if ! [ -e $CACHE_FOLDER ]; then
-    mkdir -p $CACHE_FOLDER
+if ! [ -e "$CACHE_FOLDER" ]; then
+    mkdir -p "$CACHE_FOLDER"
 fi
 
 # Passed arguments
@@ -34,7 +34,7 @@ if ! [ -e "$BKG_IMG" ]; then
     exit 2
 fi
 
-MD5_BKG_IMG=$(md5sum $BKG_IMG | cut -c 1-10)
+MD5_BKG_IMG=$(md5sum "$BKG_IMG" | cut -c 1-10)
 MD5_SCREEN_CONFIG=$(xrandr | md5sum - | cut -c 1-32) # Hash of xrandr output
 OUTPUT_IMG="$CACHE_FOLDER""$MD5_SCREEN_CONFIG"."$MD5_BKG_IMG".png # Path of final image
 OUTPUT_IMG_WIDTH=0 # Decide size to cover all screens
@@ -72,9 +72,11 @@ LOCK="$(echo i3lock \
 LOCK_BASE_CMD="$LOCK -i $OUTPUT_IMG"
 
 if [ "$lock_args" ]; then
-        LOCK_ARGS="$lock_args"  # Passed command
+    # Passed command
+    LOCK_ARGS="$lock_args"
 else
-        LOCK_ARGS="-t -e"  # Default
+    # Default
+    LOCK_ARGS="-t -e"
 fi
 LOCK_CMD="$LOCK_BASE_CMD $LOCK_ARGS"
 
@@ -124,7 +126,7 @@ blur_shrink=$(echo "scale=2; 20 / $blur_level" | bc)
 blur_sigma=$(echo "scale=2; 0.6 * $blur_level" | bc)
 
 DIMBLUR="-fill black -colorize 40% -filter Gaussian -resize $blur_shrink% -define filter:sigma=$blur_sigma -resize $res^ -gravity center"
-eval convert "$OUTPUT_IMG" $PARAMS "$DIMBLUR" "$OUTPUT_IMG"
+eval convert "$OUTPUT_IMG" "$PARAMS" "$DIMBLUR" "$OUTPUT_IMG"
 
 # Apply rectangle beneath time/date OSD
 logical_px() {
