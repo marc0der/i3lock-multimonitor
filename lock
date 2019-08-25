@@ -113,11 +113,19 @@ do
   fi
 done <<<"`xrandr`"
 
-#Execute ImageMagick:
-eval convert -size ${OUTPUT_IMG_WIDTH}x${OUTPUT_IMG_HEIGHT} 'xc:black' $OUTPUT_IMG
-eval convert $OUTPUT_IMG $PARAMS $OUTPUT_IMG
+# Prepare final image
+eval convert -size ${OUTPUT_IMG_WIDTH}x${OUTPUT_IMG_HEIGHT} 'xc:black' "$OUTPUT_IMG"
 
-#Lock the screen:
+# Apply dim and blur effects
+res="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
+blur_level=1
+blur_shrink=$(echo "scale=2; 20 / $blur_level" | bc)
+blur_sigma=$(echo "scale=2; 0.6 * $blur_level" | bc)
+
+DIMBLUR="-fill black -colorize 40% -filter Gaussian -resize $blur_shrink% -define filter:sigma=$blur_sigma -resize $res^ -gravity center"
+eval convert "$OUTPUT_IMG" $PARAMS "$DIMBLUR" "$OUTPUT_IMG"
+
+
 if [[ "$cache_only" == 'true' ]]; then
 	echo "Cacheing only, doing nothing..."
 else
