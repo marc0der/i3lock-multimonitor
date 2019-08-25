@@ -41,7 +41,35 @@ OUTPUT_IMG_WIDTH=0 # Decide size to cover all screens
 OUTPUT_IMG_HEIGHT=0 # Decide size to cover all screens
 
 #i3lock command
-LOCK_BASE_CMD="i3lock -i $OUTPUT_IMG"
+insidecolor=00000000
+ringcolor=ffffffff
+keyhlcolor=d23c3dff
+bshlcolor=d23c3dff
+separatorcolor=00000000
+insidevercolor=00000000
+insidewrongcolor=d23c3dff
+ringvercolor=ffffffff
+ringwrongcolor=ffffffff
+verifcolor=ffffffff
+timecolor=ffffffff
+datecolor=ffffffff
+loginbox=00000066
+font="sans-serif"
+LOCK="$(echo i3lock \
+		--timepos='x+110:h-70' \
+		--datepos='x+43:h-45' \
+		--insidecolor=$insidecolor --ringcolor=$ringcolor --line-uses-inside \
+		--keyhlcolor=$keyhlcolor --bshlcolor=$bshlcolor --separatorcolor=$separatorcolor \
+		--insidevercolor=$insidevercolor --insidewrongcolor=$insidewrongcolor \
+		--ringvercolor=$ringvercolor --ringwrongcolor=$ringwrongcolor --indpos='x+280:h-70' \
+		--radius=20 --ring-width=4 --veriftext='' --wrongtext='' \
+		--verifcolor=$verifcolor --timecolor=$timecolor --datecolor=$datecolor \
+		--time-font=$font --date-font=$font --layout-font=$font --verif-font=$font --wrong-font=$font \
+		--clock --date-align 1 \
+		--noinputtext='' --force-clock)"
+
+LOCK_BASE_CMD="$LOCK -i $OUTPUT_IMG"
+
 if [ "$lock_args" ]; then
         LOCK_ARGS="$lock_args"  # Passed command
 else
