@@ -9,9 +9,11 @@ if ! [ -e $CACHE_FOLDER ]; then
 fi
 
 #Passed arguments
-while getopts ":i:a:" opt; do
+while getopts ":i:a:c:" opt; do
     case $opt in
-        i) arg_image="$OPTARG"
+        i) arg_image="$OPTARG" && cache_only="false"
+        ;;
+        c) arg_image="$OPTARG" && cache_only="true"
         ;;
         a) lock_args="$OPTARG"
         ;;
@@ -47,10 +49,12 @@ else
 fi
 LOCK_CMD="$LOCK_BASE_CMD $LOCK_ARGS"
 
-if [ -e $OUTPUT_IMG ]
-then
+if [[ -e "$OUTPUT_IMG" && "$cache_only" == 'false' ]]; then
     # Lock screen since image already exists
     $LOCK_CMD
+    exit 0
+elif [[ -e "$OUTPUT_IMG" && "$cache_only" == 'true' ]]; then
+    echo "Image already converted, doing nothing..."
     exit 0
 fi
 
@@ -86,4 +90,8 @@ eval convert -size ${OUTPUT_IMG_WIDTH}x${OUTPUT_IMG_HEIGHT} 'xc:black' $OUTPUT_I
 eval convert $OUTPUT_IMG $PARAMS $OUTPUT_IMG
 
 #Lock the screen:
-$LOCK_CMD
+if [[ "$cache_only" == 'true' ]]; then
+	echo "Cacheing only, doing nothing..."
+else
+	$LOCK_CMD
+fi
