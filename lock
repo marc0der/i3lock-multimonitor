@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Constants
+# Constants
 DISPLAY_RE="([0-9]+)x([0-9]+)\\+([0-9]+)\\+([0-9]+)" # Regex to find display dimensions
 FOLDER=`dirname "$BASH_SOURCE"` # Current folder
 CACHE_FOLDER="$FOLDER"/img/cache/ # Cache folder
@@ -8,7 +8,7 @@ if ! [ -e $CACHE_FOLDER ]; then
     mkdir -p $CACHE_FOLDER
 fi
 
-#Passed arguments
+# Passed arguments
 while getopts ":i:a:c:" opt; do
     case $opt in
         i) arg_image="$OPTARG" && cache_only="false"
@@ -22,7 +22,7 @@ while getopts ":i:a:c:" opt; do
     esac
 done
 
-#Image paths
+# Image paths
 if [ "$arg_image" ]; then
     BKG_IMG="$arg_image"  # Passed image
 else
@@ -40,31 +40,32 @@ OUTPUT_IMG="$CACHE_FOLDER""$MD5_SCREEN_CONFIG"."$MD5_BKG_IMG".png # Path of fina
 OUTPUT_IMG_WIDTH=0 # Decide size to cover all screens
 OUTPUT_IMG_HEIGHT=0 # Decide size to cover all screens
 
-#i3lock command
-insidecolor=00000000
-ringcolor=ffffffff
-keyhlcolor=d23c3dff
-bshlcolor=d23c3dff
-separatorcolor=00000000
-insidevercolor=00000000
-insidewrongcolor=d23c3dff
-ringvercolor=ffffffff
-ringwrongcolor=ffffffff
-verifcolor=ffffffff
-timecolor=ffffffff
-datecolor=ffffffff
-loginbox=00000066
-font="sans-serif"
+# i3lock command
+I3LOCK_INSIDE_COLOR=00000000
+I3LOCK_RING_COLOR=ffffffff
+I3LOCK_KEY_HL_COLOR=d23c3dff
+I3LOCK_BSHL_COLOR=d23c3dff
+I3LOCK_SEPARATOR_COLOR=00000000
+I3LOCK_INSIDE_VER_COLOR=00000000
+I3LOCK_INSIDE_WRONG_COLOR=d23c3dff
+I3LOCK_RING_VER_COLOR=ffffffff
+I3LOCK_RING_WRONG_COLOR=ffffffff
+I3LOCK_VERIF_COLOR=ffffffff
+I3LOCK_TIME_COLOR=ffffffff
+I3LOCK_DATE_COLOR=ffffffff
+I3LOCK_LOGINBOX_COLOR=00000066
+I3LOCK_FONT="sans-serif"
 LOCK="$(echo i3lock \
 		--timepos='x+110:h-70' \
 		--datepos='x+43:h-45' \
-		--insidecolor=$insidecolor --ringcolor=$ringcolor --line-uses-inside \
-		--keyhlcolor=$keyhlcolor --bshlcolor=$bshlcolor --separatorcolor=$separatorcolor \
-		--insidevercolor=$insidevercolor --insidewrongcolor=$insidewrongcolor \
-		--ringvercolor=$ringvercolor --ringwrongcolor=$ringwrongcolor --indpos='x+280:h-70' \
+		--insidecolor=$I3LOCK_INSIDE_COLOR --ringcolor=$I3LOCK_RING_COLOR --line-uses-inside \
+		--keyhlcolor=$I3LOCK_KEY_HL_COLOR --bshlcolor=$I3LOCK_BSHL_COLOR --separatorcolor=$I3LOCK_SEPARATOR_COLOR \
+		--insidevercolor=$I3LOCK_INSIDE_VER_COLOR --insidewrongcolor=$I3LOCK_INSIDE_WRONG_COLOR \
+		--ringvercolor=$I3LOCK_RING_VER_COLOR --ringwrongcolor=$I3LOCK_RING_WRONG_COLOR --indpos='x+280:h-70' \
 		--radius=20 --ring-width=4 --veriftext='' --wrongtext='' \
-		--verifcolor=$verifcolor --timecolor=$timecolor --datecolor=$datecolor \
-		--time-font=$font --date-font=$font --layout-font=$font --verif-font=$font --wrong-font=$font \
+		--verifcolor=$I3LOCK_VERIF_COLOR --timecolor=$I3LOCK_TIME_COLOR --datecolor=$I3LOCK_DATE_COLOR \
+		--time-font=$I3LOCK_FONT --date-font=$I3LOCK_FONT --layout-font=$I3LOCK_FONT \
+		--verif-font=$I3LOCK_FONT --wrong-font=$I3LOCK_FONT \
 		--clock --date-align 1 \
 		--noinputtext='' --force-clock)"
 
@@ -86,7 +87,7 @@ elif [[ -e "$OUTPUT_IMG" && "$cache_only" == 'true' ]]; then
     exit 0
 fi
 
-#Execute xrandr to get information about the monitors:
+# Execute xrandr to get information about the monitors:
 while read LINE
 do
   #If we are reading the line that contains the position information:
@@ -158,7 +159,7 @@ for RES in $SR; do
 	rectangles+="rectangle $CX,$CY $((CX+$(logical_px 300 1))),$((CY-$(logical_px 80 2))) "
 done
 
-RECTANGLE="-draw 'fill #$loginbox $rectangles'"
+RECTANGLE="-draw 'fill #$I3LOCK_LOGINBOX_COLOR $rectangles'"
 eval convert "$OUTPUT_IMG" "$RECTANGLE" "$OUTPUT_IMG"
 
 if [[ "$cache_only" == 'true' ]]; then
