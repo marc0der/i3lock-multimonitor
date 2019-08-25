@@ -9,9 +9,9 @@ if ! [ -e "$CACHE_FOLDER" ]; then
 fi
 
 # Passed arguments
-while getopts ":i:a:c:" opt; do
+while getopts ":l:a:c:" opt; do
     case $opt in
-        i) arg_image="$OPTARG" && cache_only="false"
+        l) arg_image="$OPTARG" && cache_only="false"
         ;;
         c) arg_image="$OPTARG" && cache_only="true"
         ;;
