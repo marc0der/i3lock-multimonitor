@@ -55,6 +55,7 @@ I3LOCK_TIME_COLOR=ffffffff
 I3LOCK_DATE_COLOR=ffffffff
 I3LOCK_LOGINBOX_COLOR=00000066
 I3LOCK_FONT="sans-serif"
+I3LOCK_DATESTR='%A,%x'
 LOCK="$(echo i3lock \
 		--timepos='x+110:h-70' \
 		--datepos='x+43:h-45' \
@@ -67,6 +68,7 @@ LOCK="$(echo i3lock \
 		--time-font=$I3LOCK_FONT --date-font=$I3LOCK_FONT --layout-font=$I3LOCK_FONT \
 		--verif-font=$I3LOCK_FONT --wrong-font=$I3LOCK_FONT \
 		--clock --date-align 1 \
+		--datestr=$I3LOCK_DATESTR \
 		--noinputtext='' --force-clock)"
 
 LOCK_BASE_CMD="$LOCK -i $OUTPUT_IMG"
